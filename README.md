@@ -3,6 +3,16 @@ title: Node.js--learning
 ---
 > Node.js 是一个基于 Chrome V8 引擎的 JavaScript运行环境。
 
+重点目录：
+
+[Node的事件驱动模型](https://github.com/BryantOut/Node.js-learning#node%E7%9A%84%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B)
+
+[箭头函数](https://bryantout.github.io/2018/08/19/%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0/)
+
+[node模块化](https://bryantout.github.io/2018/08/19/node%E6%A8%A1%E5%9D%97%E5%8C%96/)
+
+[node中art-template模块介绍](https://bryantout.github.io/2018/08/19/node%E4%B8%AD%E7%9A%84art-template%E6%A8%A1%E5%9D%97/)
+
 # 【⭐⭐】Node的事件驱动模型
 
 [原创作者](https://blog.csdn.net/u013217071/article/details/78043081)
@@ -323,3 +333,4 @@ server.on('request',function(req,res) {
 ```
 
 ![](/mdImg/构建node服务器3.png)
+
