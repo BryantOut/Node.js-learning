@@ -15,9 +15,9 @@ title: Node.js--learning
 
 小知识点补充：
 
-[array中的concat()及sort()方法]()
+[array.concat()](#arrayconcat)
 
-[array.sort()]()
+[array.sort()](#arraysort)
 
 # 【⭐⭐】Node的事件驱动模型
 
