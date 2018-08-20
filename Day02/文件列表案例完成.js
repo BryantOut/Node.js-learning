@@ -19,6 +19,8 @@ server.on('request', (req, res) => {
         } else {
             // 创建一个数组存储所有文件和文件夹对象
             var dirInfoList = [];
+            var dirList = [];
+            var fileList = [];
             //遍历数组，获取每一个数组元素所代表的文件或文件夹的详细信息
             data.forEach((value, index, array) => {
                 //fs.stat()：可以根据全路径获取文件或文件夹的详细信息
@@ -35,12 +37,24 @@ server.on('request', (req, res) => {
                         // isFile函数判断是文件还是文件夹，如果是文件则返回true
                         obj.type = stat.isFile()
                         //将对象存储到数组中
-                        dirInfoList.push(obj)
+                        //dirInfoList.push(obj)
+
+                        //判断是文件还是文件夹，分别存入不同的数组
+                        if (stat.isFile()) {
+                            fileList.push(obj)
+                        } else {
+                            dirList.push(obj)
+                        }
 
                         // 因为读取文件是异步请求，
                         //所以并不知道什么时候会完成，所以应该在循环内部判断并渲染
                         //判断是否读取完毕
                         if (count == data.length) {
+                            //先将文件数组及文件夹数组排序后再进行连接
+                            dirList.sort(sortByFileName)
+                            fileList.sort(sortByFileName)
+                            //将文件数组及文件夹数组连接起来
+                            dirInfoList = dirList.concat(fileList)//注意concat返回的是一个副本，注意接收
                             var html = template(__dirname + "/index.html", {
                                 list: dirInfoList
                             })
@@ -52,3 +66,11 @@ server.on('request', (req, res) => {
         }
     })
 })
+
+function sortByFileName(a, b) {
+    if (a.name > b.name) {
+        return 1
+    } else {
+        return -1
+    }
+}
