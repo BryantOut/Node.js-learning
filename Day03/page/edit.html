@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hero - Admin</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    <style>
+        .hero-list img {
+            width: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="page-header container">
+            <h1>王者荣耀
+                <small>英雄管理器</small>
+            </h1>
+        </div>
+    </header>
+    <div class="container hero-list">
+        <form action="/add" method="POST" enctype="multipart/form-data">
+            <table class="table table-hover">
+                
+                <tr>
+                    <td>姓名：</td>
+                    <td>
+                        <input type="text" name="name" value="{{name}}">
+                        <input type="hidden" name='id' value='{{id}}'>
+                    </td>
+                </tr>
+                <tr>
+                    <td>性别：</td>
+                    <td>
+                        {{if gender == '男'}}
+                        <input id="nan" name="gender" value="男" type="radio" checked>
+                        <label for="nan">男</label>
+                        <input name="gender" value="女" type="radio" id="nv">
+                        <label for="nv">女</label>
+                        {{else if gender == '女'}}
+                        <input id="nan" name="gender" value="男" type="radio">
+                        <label for="nan">男</label>
+                        <input name="gender" value="女" type="radio" id="nv" checked>
+                        <label for="nv">女</label>
+                        {{/if}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>头像：</td>
+                    <td>
+                        <img id="photo" style='width:150px' src="/images/{{img}}">
+                        <input type="file" id="img">
+                        <!-- 使用隐藏域来存储图片的名称，目的只有一个，后期更方便获取到文件名称 -->
+                        <input type="hidden" name='img' value='{{img}}'>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="button" id="edit" value="修改">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</body>
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<script>
+    // 我们希望用户一旦选择了文件就进行文件的上传操作：好处就是能够提高用户体验
+    $('#img').on('change', () => {
+        //获取输入框中的信息
+        // var username = $("input[name='name']").val();
+        // console.log(username)
+        //获取到文件的上传信息
+        var file = document.querySelector('#img').files[0]
+        //html5的一个特征，利用fromData表单对象，可以用来传递二进制数据（文件流）
+        var formObj = new FormData();
+        //formObj.append('file',文件对象（FILE）); //append('键','值')
+        formObj.append('file', file)
+        if (file) {
+            //有文件上传，发送ajax请求，通过php帮助我们处理上传文件
+            $.ajax({
+                url: '/fileUpload',
+                dataType: 'json',
+                type: 'post', //上传文件只能是post
+                data: formObj,
+                contentType: false, //上传文件不可以指定数据类型
+                processData: false, //对数据不进行数据的序列化
+                success: (ret) => {
+                    // console.log(ret)
+                    var code = ret.code
+                    if (code === 400) {
+                        $('#photo').attr('src', '/images/' + ret.imgName)
+                        $('[name=img]').val(ret.imgName)
+                    }
+                }
+            })
+        }
+    })
+
+    // 为修改按钮注册点击事件
+    $('#edit').on('click', (e) => {
+        e.preventDefault()
+        $.ajax({
+            url:'/edit',
+            dataType:'json',
+            type:'post',
+            data:$('form').serialize(),
+            success:(result)=>{
+                
+            }
+        })
+    })
+</script>
+
+</html>
